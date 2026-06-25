@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CJ Renovation Proposal 250626 - $75K Budget</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .btn:hover { background: var(--secondary); transform: translateY(-2px); }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #059669; }
+
+        .page {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 15mm;
+            min-height: 297mm;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 { color: var(--primary); font-size: 2em; margin-bottom: 10px; }
+        .header .subtitle { color: #64748b; font-size: 1.1em; }
+        .budget-highlight {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .alert-box {
+            background: #eff6ff;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+
+        .info-label { font-weight: 600; color: var(--primary); }
+
+        .section { margin-bottom: 25px; }
+
+        .section-title {
+            background: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .image-container {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .image-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .image-upload input[type=file] {
+            position: absolute;
+            left: 0; top: 0; opacity: 0;
+            cursor: pointer; width: 100%; height: 100%;
+        }
+
+        .uploaded-image {
+            max-width: 100%;
+            max-height: 400px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .placeholder-box {
+            background: white;
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            padding: 30px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #64748b;
+        }
+
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .budget-table th {
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .budget-table td { 
+            padding: 8px 10px; 
+            border-bottom: 1px solid #e2e8f0; 
+        }
+
+        .budget-table tr:nth-child(even) { background: #f8fafc; }
+        
+        .budget-total { 
+            background: var(--primary); 
+            color: white; 
+            font-weight: bold; 
+            font-size: 1.1em; 
+        }
+
+        .category-header {
+            font-weight: bold;
+            color: var(--primary);
+            background: #eff6ff !important;
+        }
+
+        .new-items {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .layout-item {
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .layout-item h4 { color: var(--primary); margin-bottom: 5px; font-size: 1em; }
+
+        .highlight-box { background: #fef3c7; border-left: 4px solid var(--accent); padding: 12px; border-radius: 6px; margin: 12px 0; }
+        .warning-box { background: #fee2e2; border-left: 4px solid var(--danger); padding: 12px; border-radius: 6px; margin: 12px 0; }
+        .success-box { background: #d1fae5; border-left: 4px solid var(--success); padding: 12px; border-radius: 6px; margin: 12px 0; }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+
+        .page-break { page-break-before: always; }
+
+        .image-label {
+            margin-top: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        @media print {
+            @page { margin: 10mm; size: A4; }
+            body { background: white; padding: 0; }
+            .controls { display: none !important; }
+            .page { box-shadow: none; padding: 0; max-width: 100%; min-height: auto; }
+            .section { page-break-inside: avoid; }
+            .page-break { page-break-before: always; }
+        }
+
+        @media (max-width: 768px) {
+            .controls { top: 10px; right: 10px; flex-direction: column; }
+            .btn { padding: 10px 16px; font-size: 0.85em; }
+            .page { padding: 10mm; }
+            .two-column, .layout-grid, .project-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button class="btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">🔝 Top</button>
+        <button class="btn btn-success" onclick="exportToPDF()">💾 Save as PDF</button>
+    </div>
+
+    <div class="page" id="proposalContent">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏢 CJ RENOVATION PROPOSAL</h1>
+            <div class="subtitle">TradeHub 21 #01-120</div>
+            <div class="budget-highlight">TOTAL BUDGET: $75,000 SGD</div>
+            <div style="margin-top: 10px; color: #94a3b8;">Document Date: 25 June 2026</div>
+        </div>
+
+        <div class="alert-box">
+            <strong>📊 BUDGET ALLOCATION:</strong> This proposal is strategically balanced with <strong>30% allocated to Equipment ($22,500)</strong> and <strong>70% allocated to Renovation Works ($52,500)</strong>. This ensures high-quality finishes for the live streaming and meeting spaces while fully equipping the office.
+        </div>
+
+        <!-- Project Information -->
+        <div class="project-info">
+            <div>
+                <div class="info-item"><span class="info-label">Location:</span><span>TradeHub 21 #01-120</span></div>
+                <div class="info-item"><span class="info-label">Floor Area:</span><span>158.00 m²</span></div>
+                <div class="info-item"><span class="info-label">Unit Type:</span><span>Ground Floor Commercial</span></div>
+            </div>
+            <div>
+                <div class="info-item"><span class="info-label">Total Budget:</span><span style="color: var(--primary); font-weight: bold;">$75,000 SGD</span></div>
+                <div class="info-item"><span class="info-label">Cost per m²:</span><span>~$475/m²</span></div>
+                <div class="info-item"><span class="info-label">Timeline:</span><span>10-12 Weeks</span></div>
+            </div>
+        </div>
+
+        <!-- Floor Plan Image -->
+        <div class="section">
+            <div class="section-title">📐 2D Floor Plan Layout</div>
+            <div class="image-container">
+                <div class="image-upload">
+                    <div id="floorPlanPlaceholder" class="placeholder-box">
+                        <div style="font-size: 3em;">📁</div>
+                        <div><strong>Click to Upload Floor Plan Image</strong></div>
+                        <div style="font-size: 0.85em; margin-top: 8px;">Supports: JPG, PNG</div>
+                    </div>
+                    <img id="floorPlanImage" class="uploaded-image" style="display: none;">
+                    <input type="file" accept="image/*" onchange="handleImageUpload(this, 'floorPlan')">
+                </div>
+                <div class="image-label">Figure 1: Proposed 2D Floor Plan (158 sqm)</div>
+            </div>
+        </div>
+
+        <!-- 3D Visualization -->
+        <div class="section">
+            <div class="section-title">🎨 3D Visualizations</div>
+            <div class="image-container">
+                <div class="image-upload">
+                    <div id="render3DPlaceholder" class="placeholder-box" style="min-height: 200px;">
+                        <div style="font-size: 3em;">🏗️</div>
+                        <div><strong>Click to Upload 3D Rendering</strong></div>
+                    </div>
+                    <img id="render3DImage" class="uploaded-image" style="display: none;">
+                    <input type="file" accept="image/*" onchange="handleImageUpload(this, 'render3D')">
+                </div>
+                <div class="image-label">Figure 2: 3D Isometric Office Layout</div>
+            </div>
+        </div>
+
+        <!-- New Equipment & Items -->
+        <div class="section">
+            <div class="section-title">🆕 EQUIPMENT ALLOCATION (30% = $22,500)</div>
+            
+            <div class="new-items">
+                <h4>📹 64 PCS CCTV Camera System — $8,000</h4>
+                <p>• 64x HD IP Cameras with night vision & comprehensive coverage</p>
+                <p>• High-capacity NVR recording system with 30-day retention</p>
+                <p>• Complete cabling, mounting, and basic configuration</p>
+            </div>
+
+            <div class="new-items">
+                <h4>💻 6 Sets PC Workstations — $7,200</h4>
+                <p>• 6x Business desktop computers with 24" monitors</p>
+                <p>• Wireless keyboard, mouse, and surge protectors</p>
+                <p>• Standard office software licensing</p>
+            </div>
+
+            <div class="new-items">
+                <h4>🪑 7 Sets Office Furniture — $7,300</h4>
+                <p>• Ergonomic workstations, executive chairs, and meeting tables</p>
+                <p>• Reception counter seating and waiting area sofas</p>
+                <p>• Ready-made, high-durability commercial grade</p>
+            </div>
+        </div>
+
+        <!-- Space Requirements -->
+        <div class="section">
+            <div class="section-title">✅ Space Requirements</div>
+            <div class="layout-grid">
+                <div class="layout-item"><h4>🎥 Live Streaming Rooms (x3)</h4><p>Rooms A, B, C with soundproofing</p></div>
+                <div class="layout-item"><h4>💼 Meeting Rooms (x3)</h4><p>Rooms 1, 2, 3 with glass partitions</p></div>
+                <div class="layout-item"><h4>🖥️ Front Counter</h4><p>Reception desk area</p></div>
+                <div class="layout-item"><h4>🛋️ Waiting Area</h4><p>Customer seating area</p></div>
+                <div class="layout-item"><h4>🍽️ Pantry</h4><p>Kitchen counter and sink</p></div>
+                <div class="layout-item"><h4>🚻 Toilets</h4><p>Male & Female facilities</p></div>
+                <div class="layout-item"><h4>📦 Staff Storage</h4><p>Full-height cabinet</p></div>
+                <div class="layout-item"><h4>💾 Server Cabinet</h4><p>IT equipment storage</p></div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Budget Breakdown -->
+        <div class="section">
+            <div class="section-title">💰 Detailed Budget Breakdown ($75,000 SGD)</div>
+            <table class="budget-table">
+                <thead>
+                    <tr><th>Category</th><th>Amount</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="category-header">
+                        <td>EQUIPMENT (30%)</td>
+                        <td>$22,500</td>
+                        <td>30%</td>
+                    </tr>
+                    <tr>
+                        <td>├ 64 PCS CCTV System</td>
+                        <td>$8,000</td>
+                        <td>11%</td>
+                    </tr>
+                    <tr>
+                        <td>├ 6 Sets PC Workstations</td>
+                        <td>$7,200</td>
+                        <td>10%</td>
+                    </tr>
+                    <tr>
+                        <td>└ 7 Sets Office Furniture</td>
+                        <td>$7,300</td>
+                        <td>9%</td>
+                    </tr>
+                    
+                    <tr class="category-header">
+                        <td>RENOVATION WORKS (70%)</td>
+                        <td>$52,500</td>
+                        <td>70%</td>
+                    </tr>
+                    <tr>
+                        <td>1. M&E Works (Electrical, Plumbing, A/C)</td>
+                        <td>$18,000</td>
+                        <td>24%</td>
+                    </tr>
+                    <tr>
+                        <td>2. Partitions & Walls (Streaming & Glass)</td>
+                        <td>$12,000</td>
+                        <td>16%</td>
+                    </tr>
+                    <tr>
+                        <td>3. Ceiling & Flooring</td>
+                        <td>$9,000</td>
+                        <td>12%</td>
+                    </tr>
+                    <tr>
+                        <td>4. Carpentry (Pantry, Counter, Cabinets)</td>
+                        <td>$6,500</td>
+                        <td>9%</td>
+                    </tr>
+                    <tr>
+                        <td>5. IT Infrastructure (Cabling, Racks, Networking)</td>
+                        <td>$4,000</td>
+                        <td>5%</td>
+                    </tr>
+                    <tr>
+                        <td>6. Design & Admin Fees</td>
+                        <td>$1,500</td>
+                        <td>2%</td>
+                    </tr>
+                    <tr>
+                        <td>7. Preliminaries & Demolition</td>
+                        <td>$1,000</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>8. Contingency Fund</td>
+                        <td>$500</td>
+                        <td>1%</td>
+                    </tr>
+                    
+                    <tr class="budget-total">
+                        <td><strong>TOTAL PROJECT COST</strong></td>
+                        <td><strong>$75,000</strong></td>
+                        <td><strong>100%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Key Considerations -->
+        <div class="section">
+            <div class="section-title">⚠️ Important Notes & Building Restrictions</div>
+            
+            <div class="warning-box">
+                <strong>TradeHub 21 Building Rules:</strong>
+                <ul style="margin: 8px 0 0 20px; font-size: 0.9em;">
+                    <li>No slabbing over void areas without prior approval from Competent Authorities</li>
+                    <li>No further extension to the floor and/or mezzanine floor is allowed</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ What's Included in this Balanced Budget:</strong>
+                <ul style="margin: 8px 0 0 20px; font-size: 0.9em;">
+                    <li>Complete CCTV surveillance (64 cameras) & IT infrastructure for PCs</li>
+                    <li>6 fully equipped PC workstations & 7 sets of furniture</li>
+                    <li>High-quality renovation for 3 Live Streaming Rooms & 3 Meeting Rooms</li>
+                    <li>Full M&E works including dedicated cooling for Server & Streaming areas</li>
+                    <li>Custom carpentry for Pantry, Reception, and Storage Cabinets</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Project Timeline -->
+        <div class="section">
+            <div class="section-title">📅 Project Timeline (10-12 Weeks)</div>
+            <div style="font-size: 0.9em;">
+                <div style="margin: 10px 0;"><strong>Week 1-2:</strong> Design Finalization & Authority Submissions (SCDF, BCA, URA)</div>
+                <div style="margin: 10px 0;"><strong>Week 3:</strong> Approvals & Bulk Equipment Ordering (CCTV, PCs, Furniture)</div>
+                <div style="margin: 10px 0;"><strong>Week 4-5:</strong> Demolition, Preliminaries & Basic M&E Rough-ins</div>
+                <div style="margin: 10px 0;"><strong>Week 6-7:</strong> Partition Installation (Soundproofing & Glass)</div>
+                <div style="margin: 10px 0;"><strong>Week 8-9:</strong> Ceiling, Flooring, Painting & Carpentry Works</div>
+                <div style="margin: 10px 0;"><strong>Week 10:</strong> IT Infrastructure, CCTV & PC Installation</div>
+                <div style="margin: 10px 0;"><strong>Week 11:</strong> Furniture Delivery, Setup & Air-con Testing</div>
+                <div style="margin: 10px 0;"><strong>Week 12:</strong> Final Cleaning, Testing & Handover</div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="section">
+            <div class="section-title">🚀 Next Steps</div>
+            <div class="success-box">
+                <ol style="margin: 0; padding-left: 20px; font-size: 0.9em;">
+                    <li>✅ Approve the 30/70 budget allocation proposal</li>
+                    <li>✅ Confirm equipment specifications (CCTV models, PC specs, furniture choices)</li>
+                    <li>✅ Engage licensed interior designer/contractor</li>
+                    <li>✅ Submit plans to authorities (SCDF, BCA, URA)</li>
+                    <li>✅ Begin renovation & equipment procurement works</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>CJ Renovation Proposal - TradeHub 21 #01-120</strong></p>
+            <p>Document Reference: CJ renovation proposal 250626</p>
+            <p>Total Budget: $75,000 SGD | Equipment: 30% ($22.5K) | Renovation: 70% ($52.5K)</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">
+                This proposal is valid for 30 days from the date of issue. All costs are estimates and subject to final contractor quotations.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function handleImageUpload(input, imageId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(imageId + 'Placeholder').style.display = 'none';
+                    const img = document.getElementById(imageId + 'Image');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function exportToPDF() {
+            window.scrollTo(0, 0);
+            setTimeout(() => {
+                window.print();
+            }, 300);
+        }
+    </script>
+</body>
+</html>
